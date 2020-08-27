@@ -34,8 +34,8 @@ document.getElementById('btn-start-recording').addEventListener("click", functio
         });
 
         // release stream on stopRecording
-     //    recorder.stream = stream;
-        recorder = stream;
+        recorder.stream = stream;
+     //    recorder = stream;
 
         // Enable stop recording button
         document.getElementById('btn-stop-recording').disabled = false;
@@ -51,9 +51,10 @@ document.getElementById('btn-stop-recording').addEventListener("click", function
     recorder.stopRecording().then(function() {
         console.info('stopRecording success');
 
+
         // Retrieve recorded video as blob and display in the preview element
-        var blob = recorder.getBlob();
-        video.src = URL.createObjectURL(blob);
+        var videoBlob = recorder.getBlob();
+        video.src = URL.createObjectURL(videoBlob);
         video.play();
 
         // Unmute video on preview
