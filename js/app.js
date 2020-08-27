@@ -13,7 +13,7 @@ document.getElementById('btn-start-recording').addEventListener("click", functio
         video: true
     }).then(function(stream) {
         // Display a live preview on the video element of the page
-        setSrcObject(stream, video);
+        video.srcObject = stream;
 
         // Start to display the preview on the video element
         // and mute the video to disable the echo issue !
