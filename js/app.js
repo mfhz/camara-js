@@ -34,7 +34,8 @@ document.getElementById('btn-start-recording').addEventListener("click", functio
         });
 
         // release stream on stopRecording
-        recorder.stream = stream;
+     //    recorder.stream = stream;
+        recorder = stream;
 
         // Enable stop recording button
         document.getElementById('btn-stop-recording').disabled = false;
