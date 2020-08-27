@@ -1,6 +1,8 @@
 // Store a reference of the preview video element and a global reference to the recorder instance
 var video = document.getElementById('my-preview');
 var recorder;
+var x;
+// const mediaSource = new MediaSource();
 
 // When the user clicks on start video recording
 document.getElementById('btn-start-recording').addEventListener("click", function(){
@@ -8,7 +10,7 @@ document.getElementById('btn-start-recording').addEventListener("click", functio
     this.disabled = true;
 
     // Request access to the media devices
-    navigator.mediaDevices.getUserMedia({
+    const mediaSource = navigator.mediaDevices.getUserMedia({
         audio: true, 
         video: true
     }).then(function(stream) {
@@ -29,12 +31,14 @@ document.getElementById('btn-start-recording').addEventListener("click", functio
         // Start recording the video
         recorder.startRecording().then(function() {
             console.info('Recording video ...');
+            // release stream on stopRecording
         }).catch(function(error) {
             console.error('Cannot start video recording: ', error);
         });
 
         // release stream on stopRecording
         recorder.stream = stream;
+        console.log(recorder);
      //    recorder = stream;
 
         // Enable stop recording button
@@ -42,19 +46,26 @@ document.getElementById('btn-start-recording').addEventListener("click", functio
     }).catch(function(error) {
         console.error("Cannot access media devices: ", error);
     });
+    
+
 }, false);
 
 // When the user clicks on Stop video recording
 document.getElementById('btn-stop-recording').addEventListener("click", function(){
     this.disabled = true;
 
-    recorder.stopRecording().then(function() {
+    recorder.stopRecording()
+    .then(function() {
         console.info('stopRecording success');
 
 
         // Retrieve recorded video as blob and display in the preview element
-        var videoBlob = recorder.getBlob();
-        video.src = URL.createObjectURL(videoBlob);
+     //    var videoBlob = recorder.getBlob();
+        var blob = new Blob(recorder, { 'type' : 'video/mp4;'});
+        // chunks = [];
+     //    console.log(videoBlob);
+        let videoUrl = window.createObjectURL(blob)
+        video.src = videoUrl
         video.play();
 
         // Unmute video on preview
@@ -65,7 +76,9 @@ document.getElementById('btn-stop-recording').addEventListener("click", function
 
         // Enable record button again !
         document.getElementById('btn-start-recording').disabled = false;
-    }).catch(function(error) {
+        console.log(video);
+    })
+    .catch(function(error) {
         console.error('stopRecording failure', error);
     });
 }, false);
